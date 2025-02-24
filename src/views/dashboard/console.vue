@@ -1,31 +1,32 @@
 <template>
     <div>
         <div class="statistics">
-            <n-card size="small" title="工站">
+            <n-card size="small" title="本日新顾客">
                 <count-to class="big-int" :end-val="countInfo.stations" />
             </n-card>
-            <n-card size="small" title="在线电批">
+            <n-card size="small" title="本日咨询">
                 <count-to class="big-int" :end-val="countInfo.devices" />
             </n-card>
-            <n-card size="small" title="工件完成数量">
+            <n-card size="small" title="订单数量">
                 <template #header-extra>
                     <n-tag type="error">今日</n-tag>
                 </template>
-                <count-to class="big-int hl" :end-val="countInfo.completeCount" />
+                <!-- <count-to class="big-int hl" :end-val="countInfo.completeCount" /> -->
+                <count-to class="big-int hl" :end-val="150" />
             </n-card>
-            <n-card size="small" title="紧固数量">
+            <n-card size="small" title="浏览数量">
                 <template #header-extra>
                     <n-tag type="error">今日</n-tag>
                 </template>
                 <count-to class="big-int hl" :end-val="countInfo.tightenCount" />
             </n-card>
-            <n-card size="small" title="异常次数">
+            <n-card size="small" title="本日退件">
                 <template #header-extra>
                     <n-tag type="error">今日</n-tag>
                 </template>
                 <count-to class="big-int ng" :end-val="countInfo.defectCount" />
             </n-card>
-            <n-card size="small" title="直通率">
+            <n-card size="small" title="访问率">
                 <template #header-extra>
                     <n-tag type="error">今日</n-tag>
                 </template>
@@ -36,22 +37,22 @@
             </n-card>
         </div>
         <div class="charts-panel">
-            <n-card title="直通率" size="small" :segmented="seg">
+            <n-card title="访问率" size="small" :segmented="seg">
                 <div class="charts-content">
                     <echarts-container :option="passRateCharts" />
                 </div>
             </n-card>
-            <n-card title="紧固数量统计" size="small" :segmented="seg">
+            <n-card title="订单数量" size="small" :segmented="seg">
                 <div class="charts-content">
                     <echarts-container :option="tightenCountCharts" />
                 </div>
             </n-card>
-            <n-card title="紧固NG数量统计" size="small" :segmented="seg">
+            <n-card title="浏览数量" size="small" :segmented="seg">
                 <div class="charts-content">
                     <echarts-container :option="defectCountCharts" />
                 </div>
             </n-card>
-            <n-card title="紧固NG类型占比统计" size="small" :segmented="seg">
+            <n-card title="订单占比" size="small" :segmented="seg">
                 <div class="charts-content">
                     <echarts-container :option="defectTypeCharts" />
                 </div>
@@ -196,11 +197,11 @@
                 type: 'pie',
                 radius: '50%',
                 data: [
-                    { value: 1048, name: 'Search Engine' },
-                    { value: 735, name: 'Direct' },
-                    { value: 580, name: 'Email' },
-                    { value: 484, name: 'Union Ads' },
-                    { value: 300, name: 'Video Ads' },
+                    { value: 1048, name: 'eSIM 日本流量套餐' },
+                    { value: 735, name: 'eSIM 韩国流量套餐' },
+                    { value: 580, name: 'eSIM 美国流量套餐' },
+                    { value: 484, name: 'eSIM 印尼流量套餐' },
+                    { value: 300, name: 'eSIM 新加坡流量套餐' },
                 ],
                 emphasis: {
                     itemStyle: {

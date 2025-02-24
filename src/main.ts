@@ -6,6 +6,8 @@ import { setupDirectives, setupNaive, setupNaiveDiscreteApi } from '@/core/plugi
 import App from './App.vue';
 import router, { setupRouter } from './router';
 import { setupStore } from '@/store';
+// mock
+import './mock';
 
 async function bootstrap() {
     const app = createApp(App);

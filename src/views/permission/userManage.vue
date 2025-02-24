@@ -21,7 +21,15 @@
             @modal-show="(val: boolean) => (driver.showModal.value = val)"
         >
             <n-form-item label="绑定角色">
-                <n-select :options="[]" v-model:value="formData.role_id" placeholder="请选择角色" />
+                <n-select
+                    :options="[
+                        { label: '管理员', value: 1 },
+                        { label: '普通用户', value: 2 },
+                        { label: '访客', value: 3 },
+                    ]"
+                    v-model:value="formData.role_id"
+                    placeholder="请选择角色"
+                />
             </n-form-item>
             <n-form-item label="用户名">
                 <n-input v-model:value="formData.user_name" />
@@ -40,6 +48,9 @@
     import ButtonPlus from '@/components/Buttons/ButtonPlus.vue';
     import TableEditModal from '@/views/_base/tableDriver/components/TableEditModal.vue';
     import TableSearch from '@/views/_base/tableDriver/components/TableSearch.vue';
+
+    // mock
+    import { loadUserList, addUser, updateUser, deleteUser } from '@/api/mock/user';
 
     interface RowData extends TableDataRow {
         role_id: string;
@@ -60,7 +71,7 @@
     const dialog = useDialog();
     const driver = tableDriver<RowData>({
         table,
-        loadApi: fakeLoadApi,
+        loadApi: loadUserList,
         newForm: () => {
             return {
                 role_id: '',
@@ -75,7 +86,7 @@
                 positiveText: '确定',
                 negativeText: '再想一想',
                 onPositiveClick: async () => {
-                    await fakeDeleteApi(record);
+                    await deleteUser(record?.id);
                     table.value.reload();
                 },
             });
@@ -84,7 +95,7 @@
     const formData = computed(() => driver.formData.value);
 
     async function createNewData() {
-        await fakeCreateApi(formData.value);
+        await addUser(formData.value);
 
         driver.showModal.value = false;
         table.value.reload();
@@ -97,7 +108,8 @@
             positiveText: '确定',
             negativeText: '再想一想',
             onPositiveClick: async () => {
-                await fakeEditApi({ ...formData.value });
+                console.log('formData.value', formData.value);
+                await updateUser(formData.value.id, { ...formData.value });
 
                 driver.showModal.value = false;
                 table.value.reload();

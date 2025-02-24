@@ -72,14 +72,24 @@ export function login(params: any) {
     //     }
     // );
     // todo 登陆
-    return new Promise<BasicResponseModel<UserInfo>>((resolve) => {
-        resolve({
-            code: 200,
-            message: '',
-            result: params,
-            token: '123123123123123',
+    const { username, password } = params;
+    if (username === 'william' && password === 'qwer123456') {
+        return new Promise<BasicResponseModel<UserInfo>>((resolve) => {
+            resolve({
+                code: 200,
+                message: '',
+                result: params,
+                token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQwMDMxMjAwLCJpYXQiOjE3Mzk5NDQ4MDAsImp0aSI6IjEyNDU1OTg5YWZhMjQyOGViZjhiY2Y2YzE5ZDUwMDlkIiwidXNlcl9pZCI6MX0.AdemqleiI64DIo9nyhc0zPBef5SLQ7thTukfMAbVvaU',
+            });
         });
-    });
+    } else {
+        return Promise.resolve({
+            code: 500,
+            message: '用户名或密码错误',
+            result: params,
+            token: '',
+        });
+    }
 }
 
 /**

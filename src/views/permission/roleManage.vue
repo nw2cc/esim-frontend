@@ -55,6 +55,9 @@
     import { PermissionTreeData } from '@/router/types';
     import TableSearch from '@/views/_base/tableDriver/components/TableSearch.vue';
 
+    // mock
+    import { loadRoleList, addRole, updateRole, deleteRole } from '@/api/mock/role';
+
     interface RowData extends TableDataRow {
         role_name: string;
         is_admin: boolean;
@@ -69,7 +72,7 @@
     const dialog = useDialog();
     const driver = tableDriver<RowData>({
         table,
-        loadApi: fakeLoadApi,
+        loadApi: loadRoleList,
         newForm: () => {
             return {
                 role_name: '',
@@ -85,7 +88,7 @@
                 positiveText: '确定',
                 negativeText: '再想一想',
                 onPositiveClick: async () => {
-                    // await deleteApi(record);
+                    await deleteRole(record?.id);
                     table.value.reload();
                 },
             });
@@ -113,7 +116,8 @@
     };
 
     async function createNewData() {
-        await fakeCreateApi(formData.value);
+        console.log('formData.value', formData.value);
+        await addRole(formData.value);
 
         driver.showModal.value = false;
         table.value.reload();
@@ -126,7 +130,8 @@
             positiveText: '确定',
             negativeText: '再想一想',
             onPositiveClick: async () => {
-                // await editApi({ ...driver.formData.value });
+                console.log('formData.value', formData.value);
+                await updateRole(formData.value.id, { ...formData.value });
 
                 driver.showModal.value = false;
                 table.value.reload();
