@@ -1,6 +1,17 @@
 import Mock from 'mockjs';
 import orderData from './data.json';
 
+const filteredOrderList: Record<string, any>[] = orderData.map((item: Record<string, any>) => {
+    const filterKey = ['shop', 'productCode', 'convertedRMB', 'rechargeAmount'];
+    const res = {};
+    for (const key in item) {
+        if (!filterKey.includes(key)) {
+            res[key] = item[key];
+        }
+    }
+    return res;
+});
+
 // 生成 2024-10-25 至 2025-03-14 之间的随机日期
 function getRandomDate() {
     const start = new Date('2024-10-25').getTime();
@@ -26,7 +37,7 @@ function getToday() {
 }
 
 // 遍历 JSON 数据，修改 `usageDate`
-const orderList = (orderData as any).map((order: Record<string, any>) => ({
+const orderList = (filteredOrderList as any).map((order: Record<string, any>) => ({
     ...order,
     usageDate: getRandomDate(),
 }));

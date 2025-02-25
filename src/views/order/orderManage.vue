@@ -7,7 +7,7 @@
             :request="driver.loadDataTable"
             :row-key="(row: RowData) => row.id"
             :actionColumn="driver.actionColumn"
-            :scroll-x="2700"
+            :scroll-x="2000"
         >
             <template #tableTitle>
                 <button-plus type="primary" @click="driver.addData">新建订单</button-plus>
@@ -24,10 +24,6 @@
                 <n-input v-model:value="formData.orderId" placeholder="请输入订单编号" />
             </n-form-item>
 
-            <n-form-item label="店铺名称">
-                <n-input v-model:value="formData.shop" placeholder="请输入店铺名称" />
-            </n-form-item>
-
             <n-form-item label="订单方式">
                 <n-select
                     :options="[
@@ -41,10 +37,6 @@
 
             <n-form-item label="套餐方案">
                 <n-input v-model:value="formData.packageMethod" placeholder="请输入套餐方案" />
-            </n-form-item>
-
-            <n-form-item label="商品选项货号">
-                <n-input v-model:value="formData.productCode" placeholder="请输入商品选项货号" />
             </n-form-item>
 
             <n-form-item label="ICCID">
@@ -70,14 +62,6 @@
 
             <n-form-item label="订单金额">
                 <n-input v-model:value="formData.orderAmount" placeholder="请输入订单金额" />
-            </n-form-item>
-
-            <n-form-item label="换算人民币">
-                <n-input v-model:value="formData.convertedRMB" placeholder="请输入换算人民币" />
-            </n-form-item>
-
-            <n-form-item label="充值金额">
-                <n-input v-model:value="formData.rechargeAmount" placeholder="请输入充值金额" />
             </n-form-item>
 
             <n-form-item label="开启状态">
@@ -119,17 +103,17 @@
     const table = ref();
     const columns: TableDataColumn<RowData>[] = [
         { title: '订单编号', key: 'orderId' },
-        { title: '店铺名称', key: 'shop' },
+        // { title: '店铺名称', key: 'shop' },
         { title: '订单方式', key: 'orderMethod' },
         { title: '套餐方案', key: 'packageMethod' },
-        { title: '商品选项货号', key: 'productCode' },
+        // { title: '商品选项货号', key: 'productCode' },
         { title: 'ICCID', key: 'iccid' },
         { title: '启用码', key: 'activationCode' },
         { title: '使用日期', key: 'usageDate' },
         { title: '邮箱', key: 'email' },
         { title: '订单金额', key: 'orderAmount' },
-        { title: '换算人民币', key: 'convertedRMB' },
-        { title: '充值金额', key: 'rechargeAmount' },
+        // { title: '换算人民币', key: 'convertedRMB' },
+        // { title: '充值金额', key: 'rechargeAmount' },
         { title: '开启状态', key: 'status' },
         ...fixedTableColumn(), // 如果有额外的固定列
     ];
