@@ -92,18 +92,17 @@ const transform: AxiosTransform = {
         // 接口请求错误，统一提示错误信息 这里逻辑可以根据项目进行修改
         let errorMsg = message;
         switch (code) {
-            // 登录超时
-            case ResultEnum.TIMEOUT:
+            // 登录失效
+            case ResultEnum.LOGOUT:
                 const LoginName = PageEnum.BASE_LOGIN_NAME;
                 const LoginPath = PageEnum.BASE_LOGIN;
                 if (router.currentRoute.value?.name === LoginName) return;
                 // 到登录页
-                errorMsg = '登录超时，请重新登录!';
+                errorMsg = '登录身份已失效，请重新登录!';
                 $dialog.warning({
                     title: '提示',
                     content: '登录身份已失效，请重新登录!',
                     positiveText: '确定',
-                    //negativeText: '取消',
                     closable: false,
                     maskClosable: false,
                     onPositiveClick: () => {
@@ -151,7 +150,10 @@ const transform: AxiosTransform = {
         } else {
             if (!isString(params)) {
                 formatDate && formatRequestDate(params);
-                if (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0) {
+                if (
+                    (Reflect.has(config, 'data') && config.data && Object.keys(config.data).length > 0) ||
+                    config.data.constructor === window.FormData
+                ) {
                     config.data = data;
                     config.params = params;
                 } else {
@@ -181,7 +183,7 @@ const transform: AxiosTransform = {
             // jwt token
             (config as Recordable).headers.Authorization = options.authenticationScheme
                 ? `${options.authenticationScheme} ${token}`
-                : token;
+                : 'Bearer ' + token;
         }
         return config;
     },

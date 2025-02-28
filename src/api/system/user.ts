@@ -1,11 +1,13 @@
 import { http } from '@/core/utils/http/axios';
-import { getAllPermissions } from '@/router';
+import { getAllPermissions, getPermissionsByValues } from '@/router';
+import { ContentTypeEnum } from '@/core/enums/httpEnum';
 
 export interface BasicResponseModel<T = any> {
     code: number;
     message: string;
     result?: T;
-    token?: string;
+    access_token?: string;
+    token_type?: string;
 }
 
 export interface UserInfo {
@@ -20,74 +22,82 @@ export interface UserInfoResp {
     permissions: Indexable[];
 }
 
-/**
- * @description: 获取用户信息
- */
 export async function getUserInfo(): Promise<UserInfoResp> {
-    // const res: UserInfoResp = await http.request(
-    //     {
-    //         url: '/getInfo',
-    //         method: 'get',
-    //     },
-    //     {
-    //         isTransformResponse: false,
-    //     }
-    // );
-    //
-    // if (res.user.admin) {
-    //     res.permissions = getAllPermissions();
-    // } else {
-    //     if (res.permissions) {
-    //         res.permissions = getPermissionsByValues(res.permissions);
-    //     }
-    // }
-    //
-    // return res;
-    // todo 用户信息
-    return new Promise<UserInfoResp>((resolve) => {
-        resolve({
-            user: {
-                admin: true,
-                avatar: '',
-                nick_name: 'William',
-                user_name: 'William',
-            },
-            permissions: getAllPermissions(),
-        });
+    const res: UserInfoResp = await http.request({
+        url: '/user/getUserInfo',
+        method: 'get',
     });
+
+    if (res.user.admin) {
+        res.permissions = getAllPermissions();
+    } else {
+        if (res.permissions) {
+            res.permissions = getPermissionsByValues(res.permissions);
+        }
+    }
+
+    return res;
 }
 
-/**
- * @description: 用户登录
- */
 export function login(params: any) {
-    // return http.request<BasicResponseModel>(
-    //     {
-    //         url: '/login',
-    //         method: 'POST',
-    //         params,
-    //     },
-    //     {
-    //         isTransformResponse: false,
-    //     }
-    // );
-    // todo 登陆
-    return new Promise<BasicResponseModel<UserInfo>>((resolve) => {
-        resolve({
-            code: 200,
-            message: '',
-            result: params,
-            token: '123123123123123',
-        });
-    });
+    const formData = new window.FormData();
+
+    formData.append('grant_type', 'password');
+    formData.append('username', params.username);
+    formData.append('password', params.password);
+
+    return http.request<BasicResponseModel>(
+        {
+            url: '/token',
+            method: 'POST',
+            data: formData,
+            headers: {
+                'Content-type': ContentTypeEnum.FORM_DATA,
+            },
+        },
+        {
+            isTransformResponse: false,
+        }
+    );
 }
 
-/**
- * @description: 用户退出登录
- */
 export function userLogout() {
     return http.request({
         url: '/user/logout',
         method: 'get',
+    });
+}
+
+export function getUserPage(data: any) {
+    return http.request({
+        url: '/user/getUserPage',
+        method: 'post',
+        data,
+    });
+}
+
+export function createUser(data: any) {
+    return http.request({
+        url: '/user/createUser',
+        method: 'post',
+        data,
+    });
+}
+
+export function updateUser(data: any) {
+    return http.request({
+        url: '/user/updateUser',
+        method: 'post',
+        data,
+    });
+}
+
+export function deleteUser(id: string) {
+    return http.request({
+        url: '/user/deleteUser',
+        method: 'post',
+        data: {
+            id,
+        },
     });
 }

@@ -63,12 +63,10 @@
                         </div>
                         <div style="padding-left: 20px">
                             <div style="font-size: 26px; color: red">{{ licence?.message }}</div>
-                            <div style="padding-top: 20px">
-                                如需获取授权或帮助，请联系团队并发送此二维码。
-                            </div>
+                            <div style="padding-top: 20px">如需获取授权或帮助，请联系团队并发送此二维码。</div>
                             <div style="padding-top: 10px">
-                                <div>咨询热线：4006062838</div>
-                                官方网站：<a href="https://www.etao-it.com">https://www.etao-it.com</a>
+                                <div>咨询热线：</div>
+                                官方网站：
                             </div>
                         </div>
                     </div>

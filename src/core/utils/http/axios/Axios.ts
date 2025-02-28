@@ -14,7 +14,7 @@ export * from './axiosTransform';
  */
 export class VAxios {
     private axiosInstance: AxiosInstance;
-    private options: CreateAxiosOptions;
+    private readonly options: CreateAxiosOptions;
 
     constructor(options: CreateAxiosOptions) {
         this.options = options;
@@ -47,7 +47,7 @@ export class VAxios {
     }
 
     /**
-     * @description:   请求方法
+     * @description: 请求方法
      */
     request<T = any>(config: AxiosRequestConfig, options?: RequestOptions): Promise<T> {
         let conf: AxiosRequestConfig = cloneDeep(config);
@@ -94,19 +94,7 @@ export class VAxios {
     }
 
     /**
-     * @description:  创建axios实例
-     */
-    private createAxios(config: CreateAxiosOptions): void {
-        this.axiosInstance = axios.create(config);
-    }
-
-    private getTransform() {
-        const { transform } = this.options;
-        return transform;
-    }
-
-    /**
-     * @description:  文件上传
+     * @description: 文件上传
      */
     uploadFile<T = any>(config: AxiosRequestConfig, params: UploadFileParams) {
         const formData = new window.FormData();
@@ -141,6 +129,18 @@ export class VAxios {
             },
             ...config,
         });
+    }
+
+    /**
+     * @description: 创建axios实例
+     */
+    private createAxios(config: CreateAxiosOptions): void {
+        this.axiosInstance = axios.create(config);
+    }
+
+    private getTransform() {
+        const { transform } = this.options;
+        return transform;
     }
 
     /**

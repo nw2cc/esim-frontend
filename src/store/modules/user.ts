@@ -51,12 +51,12 @@ export const useUserStore = defineStore({
         // 登录
         async login(params: any) {
             const response = await login(params);
-            const { token, code } = response;
+            const { access_token, code } = response;
             if (code === ResultEnum.SUCCESS) {
                 const ex = 7 * 24 * 60 * 60;
-                storage.set(ACCESS_TOKEN, token, ex);
+                storage.set(ACCESS_TOKEN, access_token, ex);
                 storage.set(IS_SCREENLOCKED, false);
-                this.setToken(token as string);
+                this.setToken(access_token as string);
                 await this.getInfo();
             }
             return response;

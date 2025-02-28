@@ -10,7 +10,7 @@
             :scroll-x="1090"
         >
             <template #tableTitle>
-                <button-plus type="primary" @click="driver.addData"> 新建{{ pageTitle }} </button-plus>
+                <button-plus type="primary" @click="driver.addData">新建{{ pageTitle }}</button-plus>
             </template>
         </basic-table>
         <table-edit-modal
@@ -27,6 +27,9 @@
                     </n-form-item>
                     <n-form-item label="超级管理员">
                         <n-switch v-model:value="formData.is_admin" />
+                    </n-form-item>
+                    <n-form-item label="备注">
+                        <n-input v-model:value="formData.remark" />
                     </n-form-item>
                 </div>
                 <div class="permission-tree">
@@ -47,13 +50,13 @@
     import { NTree, TransferRenderSourceList, TreeOption, useDialog } from 'naive-ui';
     import { tableDriver } from '@/views/_base/tableDriver';
     import { fixedTableColumn, TableDataColumn, TableDataRow } from '@/views/_base/tableDriver/tableTypes';
-    import { fakeCreateApi, fakeLoadApi } from '@/api/testing';
     import { BasicTable } from '@/components/Table';
     import ButtonPlus from '@/components/Buttons/ButtonPlus.vue';
     import TableEditModal from '@/views/_base/tableDriver/components/TableEditModal.vue';
     import { getAllPermissions, getPermissionTree } from '@/router';
     import { PermissionTreeData } from '@/router/types';
     import TableSearch from '@/views/_base/tableDriver/components/TableSearch.vue';
+    import { createRole, deleteRole, getRolePage, updateRole } from '@/api/system/role';
 
     interface RowData extends TableDataRow {
         role_name: string;
@@ -69,7 +72,7 @@
     const dialog = useDialog();
     const driver = tableDriver<RowData>({
         table,
-        loadApi: fakeLoadApi,
+        loadApi: getRolePage,
         newForm: () => {
             return {
                 role_name: '',
@@ -85,7 +88,7 @@
                 positiveText: '确定',
                 negativeText: '再想一想',
                 onPositiveClick: async () => {
-                    // await deleteApi(record);
+                    await deleteRole(record.id as string);
                     table.value.reload();
                 },
             });
@@ -113,7 +116,7 @@
     };
 
     async function createNewData() {
-        await fakeCreateApi(formData.value);
+        await createRole(formData.value);
 
         driver.showModal.value = false;
         table.value.reload();
@@ -126,7 +129,7 @@
             positiveText: '确定',
             negativeText: '再想一想',
             onPositiveClick: async () => {
-                // await editApi({ ...driver.formData.value });
+                await updateRole(driver.formData.value);
 
                 driver.showModal.value = false;
                 table.value.reload();
