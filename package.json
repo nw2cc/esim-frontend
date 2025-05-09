@@ -1,5 +1,5 @@
 {
-    "name": "etao-dianpi",
+    "name": "esim-frontend",
     "version": "1.0.0",
     "scripts": {
         "bootstrap": "pnpm install",

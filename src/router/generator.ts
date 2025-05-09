@@ -31,7 +31,7 @@ export const buildRoutes = (
     for (const item of functions) {
         children.push({
             path: item.path,
-            name: `${moduleName}_${item.path}`,
+            name: `${moduleName}_${item.path.split('/')[0]}`,
             meta: {
                 title: item.title,
                 icon: item.icon,

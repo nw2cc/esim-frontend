@@ -1,15 +1,15 @@
-import type {App, Component, Plugin} from 'vue';
-import {h, unref} from 'vue';
-import {NIcon, NTag} from 'naive-ui';
-import {PageEnum} from '@/core/enums/pageEnum';
-import {isObject} from './is';
-import {cloneDeep} from 'lodash-es';
+import type { App, Component, Plugin } from 'vue';
+import { h, unref } from 'vue';
+import { NIcon, NTag } from 'naive-ui';
+import { PageEnum } from '@/core/enums/pageEnum';
+import { isObject } from './is';
+import { cloneDeep } from 'lodash-es';
 
 /**
  * render 图标
  * */
 export function renderIcon(icon) {
-    return () => h(NIcon, null, { default: () => h(icon) });
+    return () => h(NIcon, null, { default: () => h(icon, { strokeWidth: 3, theme: 'outline' }) });
 }
 
 /**

@@ -14,6 +14,7 @@ export interface TableDataRow {
 
 export interface TableDataColumnSearch {
     type?: ColumnSearchType;
+    selectData?: { [key: string | number]: string };
     disabled?: boolean;
 }
 
@@ -21,6 +22,8 @@ export interface TableDataColumn<T extends TableDataRow> {
     title: string;
     key: keyof T;
     search?: TableDataColumnSearch;
+
+    [key: string]: any;
 }
 
 export interface TableDataRequest {
@@ -50,7 +53,8 @@ export interface TableDriverConfig<T extends TableDataRow> {
     editRow?: boolean | ((record: T) => Promise<T>);
     deleteRow?: (record: T) => Promise<void>;
     detailPage?: string;
-    actions?: ActionItem<T>[];
+    detailParams?: (record: T) => Record<string, any>;
+    actions?: (record: T) => ActionItem<T>[];
 }
 
 export interface TableDriver<T extends TableDataRow> {
@@ -68,8 +72,8 @@ export interface TableDriver<T extends TableDataRow> {
 
 export function fixedTableColumn<T extends TableDataRow>(): TableDataColumn<T>[] {
     return [
-        { title: '创建时间', key: 'create_time', search: { type: 'datetime' } },
-        { title: '修改时间', key: 'update_time', search: { type: 'datetime' } },
+        { title: '创建时间', key: 'create_time', search: { disabled: true } },
+        { title: '修改时间', key: 'update_time', search: { disabled: true } },
         { title: '备注', key: 'remark', search: { type: 'input' } },
     ];
 }

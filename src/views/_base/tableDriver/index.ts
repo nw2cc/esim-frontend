@@ -21,10 +21,11 @@ export function tableDriver<T extends TableDataRow>(config: TableDriverConfig<T>
     const actionStatus = ref(0);
     const actionColumn = reactive({
         title: '操作',
+        // width: '350px',
         key: 'action',
         fixed: 'right',
         render(record: T) {
-            const actions = [...(config.actions || [])];
+            const actions = [...(config.actions ? config.actions(record) : [])];
             if (config.editRow) {
                 actions.push({
                     label: '修改',
@@ -76,9 +77,13 @@ export function tableDriver<T extends TableDataRow>(config: TableDriverConfig<T>
     }
 
     async function showDetail(record: T) {
+        let params = {};
+        if (config.detailParams) {
+            params = config.detailParams(record);
+        }
         await router.push({
             name: config.detailPage,
-            params: { id: record.id },
+            params: { id: record.id, ...params },
         });
     }
 

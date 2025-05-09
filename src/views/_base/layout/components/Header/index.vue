@@ -113,6 +113,25 @@
     </div>
     <!--项目配置-->
     <ProjectSetting ref="drawerSetting" />
+
+    <n-modal preset="dialog" v-model:show="editPwd" :show-icon="false" :mask-closable="false" title="修改密码">
+        <n-card size="small" style="width: 500px">
+            <n-form label-placement="left" label-width="auto" size="medium">
+                <n-form-item label="原密码">
+                    <n-input v-model:value="editPwdForm.origin" type="password" />
+                </n-form-item>
+                <n-form-item label="新密码">
+                    <n-input v-model:value="editPwdForm.newPassword" type="password" />
+                </n-form-item>
+                <n-form-item label="重复新密码">
+                    <n-input v-model:value="editPwdForm.newPassword2" type="password" />
+                </n-form-item>
+                <n-form-item label=" ">
+                    <n-button type="primary" @click="editPwdAction">确认修改</n-button>
+                </n-form-item>
+            </n-form>
+        </n-card>
+    </n-modal>
 </template>
 
 <script lang="ts">
@@ -126,7 +145,7 @@
     import { AsideMenu } from '@/views/_base/layout/components/Menu/index';
     import { useProjectSetting } from '@/core/hooks/setting/useProjectSetting';
     import { websiteConfig } from '@/core/config/website.config';
-    import { userLogout } from '@/api/system/user';
+    import { editUserPwd, userLogout } from '@/api/system/user';
 
     export default defineComponent({
         name: 'PageHeader',
@@ -148,6 +167,13 @@
 
             const drawerSetting = ref();
             const avatar = ref(userStore.getAvatar);
+
+            const editPwd = ref(false);
+            const editPwdForm = ref({
+                origin: '',
+                newPassword: '',
+                newPassword2: '',
+            });
 
             const state = reactive({
                 username: userStore.username,
@@ -271,7 +297,7 @@
             ];
             const avatarOptions = [
                 {
-                    label: '个人设置',
+                    label: '修改密码',
                     key: 1,
                 },
                 {
@@ -284,7 +310,7 @@
             const avatarSelect = (key) => {
                 switch (key) {
                     case 1:
-                        router.push({ name: 'Setting' });
+                        editPwd.value = true;
                         break;
                     case 2:
                         doLogout();
@@ -315,6 +341,23 @@
                 });
             }
 
+            async function editPwdAction() {
+                if (editPwdForm.value.newPassword !== editPwdForm.value.newPassword2) {
+                    dialog.warning({
+                        title: '提示',
+                        content: '重复新密码不一致',
+                    });
+                    return;
+                }
+                await editUserPwd(editPwdForm.value);
+                editPwd.value = false;
+                editPwdForm.value = {
+                    origin: '',
+                    newPassword: '',
+                    newPassword2: '',
+                };
+            }
+
             window['$logout'] = logoutAction;
 
             return {
@@ -337,6 +380,9 @@
                 mixMenu,
                 websiteConfig,
                 handleMenuCollapsed,
+                editPwd,
+                editPwdForm,
+                editPwdAction,
             };
         },
     });

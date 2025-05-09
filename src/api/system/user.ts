@@ -92,6 +92,14 @@ export function updateUser(data: any) {
     });
 }
 
+export function editUserPwd(data: any) {
+    return http.request({
+        url: '/user/editUserPwd',
+        method: 'post',
+        data,
+    });
+}
+
 export function deleteUser(id: string) {
     return http.request({
         url: '/user/deleteUser',
