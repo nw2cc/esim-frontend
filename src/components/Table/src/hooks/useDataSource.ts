@@ -145,7 +145,7 @@ export function useDataSource(
      * @param {Object} params - 导出参数
      * @param {String} filename - 下载文件名（可选，默认 export.xlsx）
      */
-    async function exportData(filename = `${Date.now()}.xlsx`) {
+    async function exportData(filename = `${Date.now().toString()}.xlsx`) {
         setLoading(true);
         try {
             const { export: exportApi }: any = unref(propsRef);
