@@ -47,8 +47,9 @@
         { title: '渠道商品码', key: 'platform_code', search: { type: 'input' } },
         { title: 'SKU ID', key: 'sku_id', search: { type: 'input' } },
         { title: 'SKU 名称', key: 'sku_name', search: { type: 'input' } },
-        { title: '天数', key: 'days' },
-        { title: '数量', key: 'qty' },
+        { title: '天数', key: 'days', search: { type: 'input' } },
+        { title: '数量', key: 'qty', search: { type: 'input' } },
+        { title: '邮箱', key: 'email', search: { type: 'input' } },
         {
             title: '状态',
             key: 'status',
