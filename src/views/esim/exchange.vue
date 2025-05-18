@@ -8,6 +8,7 @@
             :row-key="(row: RowData) => row.id"
             :actionColumn="driver.actionColumn"
             :scroll-x="1090"
+            :exportable="true"
         />
     </n-card>
 </template>

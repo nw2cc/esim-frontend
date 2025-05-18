@@ -3,6 +3,7 @@ import type { BasicTableProps } from '../types/table';
 import type { PaginationProps } from '../types/pagination';
 import { isBoolean, isFunction } from '@/core/utils/is';
 import { APISETTING } from '../const';
+import { saveAs } from 'file-saver';
 
 export function useDataSource(
     propsRef: ComputedRef<BasicTableProps>,
@@ -139,6 +140,46 @@ export function useDataSource(
         await fetch(opt);
     }
 
+    /**
+     * 导出数据（后端返回二进制流，自动下载 xlsx 文件）
+     * @param {Function} fetchExportApi - 导出接口方法，需返回 Promise<Response> 或二进制流
+     * @param {Object} params - 导出参数
+     * @param {String} filename - 下载文件名（可选，默认 export.xlsx）
+     */
+    async function exportData(fetchExportApi: Function, params: any = {}, filename = 'export.xlsx') {
+        setLoading(true);
+        try {
+            // fetchExportApi 需返回二进制流
+            const response = await fetchExportApi({ ...params, export: true });
+            console.log(response);
+            // 兼容 axios/fetch 返回
+            let blob;
+            if (response instanceof Blob) {
+                blob = response;
+            } else if (response.data instanceof Blob) {
+                blob = response.data;
+            } else if (response instanceof ArrayBuffer) {
+                blob = new Blob([response], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+            } else if (response.data instanceof ArrayBuffer) {
+                blob = new Blob([response.data], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+            } else {
+                // fallback: try to create blob from response
+                blob = new Blob([response], {
+                    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                });
+            }
+            saveAs(blob, filename);
+        } catch (error) {
+            console.error('导出失败', error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return {
         fetch,
         getRowKey,
@@ -146,5 +187,6 @@ export function useDataSource(
         getDataSource,
         setTableData,
         reload,
+        exportData,
     };
 }

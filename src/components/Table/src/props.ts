@@ -57,4 +57,5 @@ export const basicProps = {
     },
     canResize: propTypes.bool.def(true),
     resizeHeightOffset: propTypes.number.def(0),
+    exportable: propTypes.bool.def(false),
 };

@@ -45,6 +45,18 @@
                 <span>刷新</span>
             </n-tooltip>
 
+            <!--导出-->
+            <n-tooltip v-if="exportable" trigger="hover">
+                <template #trigger>
+                    <div class="table-toolbar-right-icon" @click="exportData">
+                        <n-icon size="18">
+                            <ExportOutlined />
+                        </n-icon>
+                    </div>
+                </template>
+                <span>导出</span>
+            </n-tooltip>
+
             <!--密度-->
             <n-tooltip trigger="hover">
                 <template #trigger>
@@ -86,7 +98,7 @@
 
 <script lang="ts">
     import { computed, defineComponent, nextTick, onMounted, reactive, ref, toRaw, toRefs, unref } from 'vue';
-    import { ColumnHeightOutlined, QuestionCircleOutlined, ReloadOutlined } from '@vicons/antd';
+    import { ColumnHeightOutlined, QuestionCircleOutlined, ReloadOutlined, ExportOutlined } from '@vicons/antd';
     import { createTableContext } from './hooks/useTableContext';
 
     import ColumnSetting from './components/settings/ColumnSetting.vue';
@@ -125,6 +137,7 @@
     export default defineComponent({
         components: {
             ReloadOutlined,
+            ExportOutlined,
             ColumnHeightOutlined,
             ColumnSetting,
             QuestionCircleOutlined,
@@ -158,7 +171,7 @@
 
             const { getPaginationInfo, setPagination } = usePagination(getProps);
 
-            const { getDataSourceRef, getDataSource, getRowKey, reload } = useDataSource(
+            const { getDataSourceRef, getDataSource, getRowKey, reload, exportData } = useDataSource(
                 getProps,
                 {
                     getPaginationInfo,
@@ -229,6 +242,7 @@
 
             const tableAction = {
                 reload,
+                exportData,
                 setColumns,
                 setLoading,
                 setProps,
@@ -287,6 +301,7 @@
                 densityOptions,
                 reload,
                 densitySelect,
+                exportData,
                 updatePage,
                 updatePageSize,
                 pagination,
