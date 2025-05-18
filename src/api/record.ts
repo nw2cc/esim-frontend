@@ -21,6 +21,7 @@ export function getDeliverRecordDetail(id: string) {
 export function getDeliverRecordExport(data: any) {
     return axios.post('/api/record/deliverRecord', data, {
         responseType: 'blob',
+        withCredentials: true,
     });
 }
 
