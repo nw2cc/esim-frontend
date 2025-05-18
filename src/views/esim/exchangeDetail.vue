@@ -4,7 +4,8 @@
             <n-descriptions-item label="金蝶订单号">{{ detail.code }}</n-descriptions-item>
             <n-descriptions-item label="渠道订单号">{{ detail.sub_code }}</n-descriptions-item>
             <n-descriptions-item label="渠道商品码">{{ detail.platform_code }}</n-descriptions-item>
-            <n-descriptions-item label="SKU">{{ detail.sku_id }}</n-descriptions-item>
+            <n-descriptions-item label="SKU ID">{{ detail.sku_id }}</n-descriptions-item>
+            <n-descriptions-item label="SKU 名称" :span="2">{{ detail.sku_name }}</n-descriptions-item>
             <n-descriptions-item label="天数">{{ detail.days }}</n-descriptions-item>
             <n-descriptions-item label="数量">{{ detail.qty }}</n-descriptions-item>
             <n-descriptions-item label="发卡平台">{{ detail.platform_name }}</n-descriptions-item>

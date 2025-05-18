@@ -27,6 +27,7 @@
         platform_code: string;
         platform_name: string;
         sku_id: string;
+        sku_name: string;
         days: string;
         qty: string;
         email: string;
@@ -44,7 +45,8 @@
         { title: '金蝶订单号', key: 'code', search: { type: 'input' } },
         { title: '渠道订单号', key: 'sub_code', search: { type: 'input' } },
         { title: '渠道商品码', key: 'platform_code', search: { type: 'input' } },
-        { title: 'SKU', key: 'sku_id', search: { type: 'input' } },
+        { title: 'SKU ID', key: 'sku_id', search: { type: 'input' } },
+        { title: 'SKU 名称', key: 'sku_name', search: { type: 'input' } },
         { title: '天数', key: 'days' },
         { title: '数量', key: 'qty' },
         {
