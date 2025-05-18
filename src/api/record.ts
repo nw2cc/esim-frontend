@@ -19,7 +19,7 @@ export function getDeliverRecordDetail(id: string) {
 
 // 暂时不用封装的方法
 export function getDeliverRecordExport(data: any) {
-    return axios.post('/record/deliverRecord', data, {
+    return axios.post('/api/record/deliverRecord', data, {
         responseType: 'blob',
     });
 }
