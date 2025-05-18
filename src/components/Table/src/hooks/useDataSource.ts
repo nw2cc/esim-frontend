@@ -145,7 +145,7 @@ export function useDataSource(
      * @param {Object} params - 导出参数
      * @param {String} filename - 下载文件名（可选，默认 export.xlsx）
      */
-    async function exportData(filename = `${Date.now().valueOf()}.xlsx`) {
+    async function exportData() {
         setLoading(true);
         try {
             const { export: exportApi }: any = unref(propsRef);
@@ -172,7 +172,7 @@ export function useDataSource(
                     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 });
             }
-            saveAs(blob, filename);
+            saveAs(blob, new Date().valueOf() + '.xlsx');
         } catch (error) {
             console.error('导出失败', error);
         } finally {
