@@ -1,4 +1,5 @@
 import { http } from '@/core/utils/http/axios';
+import axios from 'axios';
 
 export function getDeliverRecord(data: any) {
     return http.request({
@@ -16,17 +17,11 @@ export function getDeliverRecordDetail(id: string) {
     });
 }
 
+// 暂时不用封装的方法
 export function getDeliverRecordExport(data: any) {
-    return http.request(
-        {
-            url: '/record/deliverRecord',
-            method: 'post',
-            data,
-        },
-        {
-            isReturnNativeResponse: true,
-        }
-    );
+    return axios.post('/record/deliverRecord', data, {
+        responseType: 'blob',
+    });
 }
 
 export function getBatchRecord(data: any) {
