@@ -1,5 +1,9 @@
 import { http } from '@/core/utils/http/axios';
 import axios from 'axios';
+import { useUser } from '@/store/modules/user';
+
+const userStore = useUser();
+const token = userStore.getToken;
 
 export function getDeliverRecord(data: any) {
     return http.request({
@@ -22,6 +26,9 @@ export function getDeliverRecordExport(data: any) {
     return axios.post('/api/record/deliverRecord', data, {
         responseType: 'blob',
         withCredentials: true,
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     });
 }
 
