@@ -74,6 +74,10 @@ export function useDataSource(
                 params = (await beforeRequest(params)) || params;
             }
             const res = await request(params);
+            if (opt && opt.export) {
+                console.log('export res:', res);
+                return res;
+            }
             const resultTotal = res[totalField];
             const currentPage = res[pageField];
             const total = res[itemCount];
@@ -146,11 +150,11 @@ export function useDataSource(
      * @param {Object} params - 导出参数
      * @param {String} filename - 下载文件名（可选，默认 export.xlsx）
      */
-    async function exportData(fetchExportApi: Function, params: any = {}, filename = 'export.xlsx') {
+    async function exportData(filename = `${Date.now()}.xlsx`) {
         setLoading(true);
         try {
             // fetchExportApi 需返回二进制流
-            const response = await fetchExportApi({ ...params, export: true });
+            const response = await fetch({ export: true });
             console.log(response);
             // 兼容 axios/fetch 返回
             let blob;

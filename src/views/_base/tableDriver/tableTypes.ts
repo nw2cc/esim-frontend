@@ -29,6 +29,7 @@ export interface TableDataColumn<T extends TableDataRow> {
 export interface TableDataRequest {
     page: number;
     pageSize: number;
+    export?: boolean;
 }
 
 export interface TableDataResponse<T extends TableDataRow> {

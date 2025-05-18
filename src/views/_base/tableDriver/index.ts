@@ -92,7 +92,10 @@ export function tableDriver<T extends TableDataRow>(config: TableDriverConfig<T>
             pageNum: req.page,
             pageSize: req.pageSize,
             ...searchData.value,
-        };
+        } as any;
+        if (req.export) {
+            params.export = true;
+        }
         return await config.loadApi({ ...params });
     }
 
