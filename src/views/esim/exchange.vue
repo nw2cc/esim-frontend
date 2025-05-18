@@ -5,6 +5,7 @@
             ref="table"
             :columns="columns"
             :request="driver.loadDataTable"
+            :export="driver.exportDataTable"
             :row-key="(row: RowData) => row.id"
             :actionColumn="driver.actionColumn"
             :scroll-x="1090"
@@ -19,7 +20,7 @@
     import { TableDataColumn, TableDataRow } from '@/views/_base/tableDriver/tableTypes';
     import { BasicTable } from '@/components/Table';
     import TableSearch from '@/views/_base/tableDriver/components/TableSearch.vue';
-    import { getDeliverRecord } from '@/api/record';
+    import { getDeliverRecord, getDeliverRecordExport } from '@/api/record';
     import { NTag } from 'naive-ui';
 
     interface RowData extends TableDataRow {
@@ -71,6 +72,7 @@
     const driver = tableDriver<RowData>({
         table,
         loadApi: getDeliverRecord,
+        exportApi: getDeliverRecordExport,
         detailPage: 'esim_exchangeDetail',
         detailParams: (record: RowData) => {
             return {

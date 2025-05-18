@@ -50,6 +50,7 @@ export interface ActionItem<T extends TableDataRow> {
 export interface TableDriverConfig<T extends TableDataRow> {
     table: Ref<any>;
     loadApi: (req: StringKeyDict) => Promise<TableDataResponse<T>>;
+    exportApi?: (req: StringKeyDict) => Promise<Blob>;
     newForm?: () => T;
     editRow?: boolean | ((record: T) => Promise<T>);
     deleteRow?: (record: T) => Promise<void>;
@@ -69,6 +70,7 @@ export interface TableDriver<T extends TableDataRow> {
     editData: (record: T) => Promise<void>;
     showDetail: (record: T) => Promise<void>;
     loadDataTable: (req: TableDataRequest) => Promise<TableDataResponse<T>>;
+    exportDataTable: (req: StringKeyDict) => Promise<Blob>;
 }
 
 export function fixedTableColumn<T extends TableDataRow>(): TableDataColumn<T>[] {

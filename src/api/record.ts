@@ -16,6 +16,19 @@ export function getDeliverRecordDetail(id: string) {
     });
 }
 
+export function getDeliverRecordExport(data: any) {
+    return http.request(
+        {
+            url: '/record/deliverRecord',
+            method: 'post',
+            data,
+        },
+        {
+            isReturnNativeResponse: true,
+        }
+    );
+}
+
 export function getBatchRecord(data: any) {
     return http.request({
         url: '/record/batchRecord',

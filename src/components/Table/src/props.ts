@@ -34,6 +34,10 @@ export const basicProps = {
         type: Function as PropType<(...arg: any[]) => Promise<any>>,
         default: null,
     },
+    export: {
+        type: Function as PropType<(...arg: any[]) => Promise<any>>,
+        default: null,
+    },
     afterRequest: {
         type: Function as PropType<(...arg: any[]) => void | Promise<any>>,
         default: null,

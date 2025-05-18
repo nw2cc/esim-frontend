@@ -52,6 +52,8 @@ export interface RequestOptions {
     isTransformResponse?: boolean;
     // 是否返回原生响应头
     isReturnNativeResponse?: boolean;
+    // blob类型
+    responseType?: 'blob' | 'arraybuffer' | 'json';
     //忽略重复请求
     ignoreCancelToken?: boolean;
     // 是否携带token
