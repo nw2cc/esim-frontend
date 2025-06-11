@@ -57,6 +57,8 @@ export interface TableDriverConfig<T extends TableDataRow> {
     detailPage?: string;
     detailParams?: (record: T) => Record<string, any>;
     actions?: (record: T) => ActionItem<T>[];
+    resend?: (record: T) => Promise<void>;
+    actionWidth?: string | number;
 }
 
 export interface TableDriver<T extends TableDataRow> {

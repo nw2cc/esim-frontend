@@ -1,6 +1,6 @@
 import { h, reactive, Ref, ref } from 'vue';
 import { TableAction } from '@/components/Table';
-import { Delete, Edit, Info } from '@icon-park/vue-next';
+import { Delete, Edit, Info, EmailBlock } from '@icon-park/vue-next';
 import { deepCopy, StringKeyDict } from '@/core/utils/obj';
 import { useRouter } from 'vue-router';
 import {
@@ -21,7 +21,7 @@ export function tableDriver<T extends TableDataRow>(config: TableDriverConfig<T>
     const actionStatus = ref(0);
     const actionColumn = reactive({
         title: '操作',
-        // width: '350px',
+        width: config.actionWidth || '',
         key: 'action',
         fixed: 'right',
         render(record: T) {
@@ -47,6 +47,13 @@ export function tableDriver<T extends TableDataRow>(config: TableDriverConfig<T>
                     label: '查看详情',
                     icon: h(Info),
                     onClick: showDetail.bind(null, record),
+                });
+            }
+            if (config.resend) {
+                actions.push({
+                    label: '重发邮箱',
+                    icon: h(EmailBlock),
+                    onClick: config.resend.bind(null, record),
                 });
             }
             return h(TableAction as any, {

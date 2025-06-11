@@ -21,6 +21,14 @@ export function getDeliverRecordDetail(id: string) {
     });
 }
 
+export function resendEmail(data: any) {
+    return http.request({
+        url: '/trade/resendEmail',
+        method: 'post',
+        data,
+    });
+}
+
 // 暂时不用封装的方法
 export function getDeliverRecordExport(data: any) {
     return axios.post('/api/record/deliverRecord', data, {
