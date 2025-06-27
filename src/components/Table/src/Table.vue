@@ -98,7 +98,7 @@
 
 <script lang="ts">
     import { computed, defineComponent, nextTick, onMounted, reactive, ref, toRaw, toRefs, unref } from 'vue';
-    import { ColumnHeightOutlined, QuestionCircleOutlined, ReloadOutlined, ExportOutlined } from '@vicons/antd';
+    import { ColumnHeightOutlined, ExportOutlined, QuestionCircleOutlined, ReloadOutlined } from '@vicons/antd';
     import { createTableContext } from './hooks/useTableContext';
 
     import ColumnSetting from './components/settings/ColumnSetting.vue';

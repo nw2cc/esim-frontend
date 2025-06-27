@@ -1,6 +1,6 @@
 import { renderIcon } from '@/core/utils';
 import { buildRoutes } from '@/router/generator';
-import { ExchangeFour, Log, Order, Sim } from '@icon-park/vue-next';
+import { ExchangeFour, Log, Order, Sim, Transport } from '@icon-park/vue-next';
 
 export default buildRoutes('esim', 'ESIM业务', renderIcon(Sim), 1, [
     {
@@ -23,6 +23,12 @@ export default buildRoutes('esim', 'ESIM业务', renderIcon(Sim), 1, [
         title: '金蝶订单查询',
         icon: renderIcon(Order),
         component: () => import('@/views/esim/orders.vue'),
+    },
+    {
+        path: 'delivery',
+        title: '发货单查询',
+        icon: renderIcon(Transport),
+        component: () => import('@/views/esim/delivery.vue'),
     },
     {
         path: 'batchRecord',
