@@ -68,6 +68,7 @@ export interface TableDriver<T extends TableDataRow> {
     showModal: Ref<boolean>;
     actionStatus: Ref<number>;
     actionColumn: any;
+    actionWidth: number;
     addData: () => void;
     editData: (record: T) => Promise<void>;
     showDetail: (record: T) => Promise<void>;
