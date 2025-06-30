@@ -19,16 +19,25 @@ export default buildRoutes('esim', 'ESIM业务', renderIcon(Sim), 1, [
         },
     },
     {
-        path: 'orders',
-        title: '金蝶订单查询',
-        icon: renderIcon(Order),
-        component: () => import('@/views/esim/orders.vue'),
-    },
-    {
         path: 'delivery',
         title: '发货单查询',
         icon: renderIcon(Transport),
         component: () => import('@/views/esim/delivery.vue'),
+    },
+    {
+        path: 'deliveryDetail/:id',
+        title: '发货单详情',
+        icon: renderIcon(Transport),
+        component: () => import('@/views/esim/deliveryDetail.vue'),
+        config: {
+            hidden: true,
+        },
+    },
+    {
+        path: 'orders',
+        title: '金蝶订单查询',
+        icon: renderIcon(Order),
+        component: () => import('@/views/esim/orders.vue'),
     },
     {
         path: 'batchRecord',

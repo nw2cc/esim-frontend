@@ -123,6 +123,7 @@ export function tableDriver<T extends TableDataRow>(config: TableDriverConfig<T>
         showModal,
         actionStatus,
         actionColumn,
+        actionWidth: config.actionWidth as number,
         addData,
         editData,
         showDetail,

@@ -7,3 +7,13 @@ export function getDeliveryItems(data: any) {
         data,
     });
 }
+
+export function getDeliveryDetail(id: string) {
+    return http.request({
+        url: '/delivery/getDeliveryDetail',
+        method: 'post',
+        data: {
+            id,
+        },
+    });
+}
