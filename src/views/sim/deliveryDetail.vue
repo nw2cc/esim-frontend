@@ -4,12 +4,21 @@
             <n-descriptions-item label="金蝶订单号">{{ detail.detail.delivery.code }}</n-descriptions-item>
             <n-descriptions-item label="平台订单号">{{ detail.detail.platform_code }}</n-descriptions-item>
             <n-descriptions-item label="ICCID">{{ detail.iccid }}</n-descriptions-item>
+            <n-descriptions-item label="最后同步时间">{{ detail.detail.delivery.sync_time }}</n-descriptions-item>
             <n-descriptions-item label="充值状态">
                 <n-tag :type="statusType[detail.status]">{{ statusMap[detail.status] }}</n-tag>
             </n-descriptions-item>
         </n-descriptions>
-        <n-tabs type="line" animated>
+        <n-tabs type="line" animated v-model:value="tab">
             <n-tab-pane name="1" tab="发货单详情">
+                <n-button style="margin: 5px 0 10px" type="success" @click="reSync">
+                    <template #icon>
+                        <n-icon>
+                            <refresh theme="outline" size="20" :strokeWidth="3" />
+                        </n-icon>
+                    </template>
+                    重新同步
+                </n-button>
                 <n-descriptions label-placement="left" bordered :column="3" size="small">
                     <n-descriptions-item label="创建时间">{{ detail.detail.delivery.create_date }}</n-descriptions-item>
                     <n-descriptions-item label="修改时间">{{ detail.detail.delivery.modify_date }}</n-descriptions-item>
@@ -82,10 +91,15 @@
                 </n-descriptions>
             </n-tab-pane>
             <n-tab-pane name="2" tab="充值记录">
-                <n-button-group style="margin-top: 10px">
-                    <n-button type="primary" @click="recharge" :disabled="isSuccess">创建充值订单</n-button>
-                </n-button-group>
-                <n-table style="margin-top: 20px" :bordered="false" :single-line="false">
+                <n-button style="margin: 5px 0 10px" type="primary" @click="recharge" :disabled="isSuccess">
+                    <template #icon>
+                        <n-icon>
+                            <wallet theme="outline" size="20" :strokeWidth="3" />
+                        </n-icon>
+                    </template>
+                    人工充值
+                </n-button>
+                <n-table :bordered="false" :single-line="false">
                     <thead>
                         <tr>
                             <th>充值方式</th>
@@ -119,8 +133,9 @@
 <script lang="ts" setup>
     import { computed, h, onMounted, ref } from 'vue';
     import { useRoute } from 'vue-router';
-    import { createRechargeOrder, getDeliveryDetail } from '@/api/delivery';
+    import { createRechargeOrder, getDeliveryDetail, refreshDeliveryDetail } from '@/api/delivery';
     import { NSpace, NTag, useDialog } from 'naive-ui';
+    import { Refresh, Wallet } from '@icon-park/vue-next';
 
     const statusMap = { '0': '未充值', '1': '已充值' };
     const statusType = { '0': 'warning', '1': 'success' };
@@ -128,12 +143,15 @@
     const route = useRoute();
     const dialog = useDialog();
 
-    const id = ref(route.params.id);
+    const tab = ref(route.params.tab);
+    const iccid = ref(route.params.iccid);
     const detail = ref({
         iccid: '',
         detail: {
             combine_item_name_split: '',
-            delivery: {},
+            delivery: {
+                code: '',
+            },
         },
     });
     const records = ref([]);
@@ -168,21 +186,26 @@
                 } catch (e) {
                     console.log(e);
                 } finally {
-                    await refresh();
+                    await getDetail();
                 }
             },
         });
     }
 
-    async function refresh() {
-        const res = await getDeliveryDetail(id.value as string);
+    async function reSync() {
+        await refreshDeliveryDetail(detail.value.detail.delivery.code);
+        await getDetail();
+    }
+
+    async function getDetail() {
+        const res = await getDeliveryDetail(iccid.value as string);
 
         detail.value = res.detailItem;
         records.value = res.rechargeRecords;
     }
 
     onMounted(async () => {
-        await refresh();
+        await getDetail();
     });
 </script>
 

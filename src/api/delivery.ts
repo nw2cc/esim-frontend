@@ -8,13 +8,31 @@ export function getDeliveryItems(data: any) {
     });
 }
 
-export function getDeliveryDetail(id: string) {
+export function getDeliveryDetail(iccid: string) {
     return http.request({
         url: '/delivery/getDeliveryDetail',
         method: 'post',
         data: {
-            id,
+            iccid,
         },
+    });
+}
+
+export function refreshDeliveryDetail(code: string) {
+    return http.request({
+        url: '/delivery/refreshDeliveryDetail',
+        method: 'post',
+        data: {
+            code,
+        },
+    });
+}
+
+export function getRechargeList(data: any) {
+    return http.request({
+        url: '/delivery/getRechargeList',
+        method: 'post',
+        data,
     });
 }
 

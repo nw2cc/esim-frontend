@@ -13,7 +13,13 @@
         />
     </n-card>
     <n-modal v-model:show="showResendDialog" preset="dialog" title="重发邮箱">
-        <n-form style="width: 350px" ref="resendFormRef" :model="resendForm" :rules="resendFormRules" label-placement="top">
+        <n-form
+            style="width: 350px"
+            ref="resendFormRef"
+            :model="resendForm"
+            :rules="resendFormRules"
+            label-placement="top"
+        >
             <n-form-item label="邮箱" path="email">
                 <n-input v-model:value="resendForm.email" :placeholder="currentRecord?.email || '请输入邮箱（可选）'" />
             </n-form-item>
@@ -22,20 +28,21 @@
 
         <div style="display: flex; justify-content: flex-end; margin-top: 16px">
             <n-button @click="showResendDialog = false">取消</n-button>
-            <n-button type="primary" @click="handleResendConfirm" :loading="loading" style="margin-left: 12px">确认</n-button>
+            <n-button type="primary" @click="handleResendConfirm" :loading="loading" style="margin-left: 12px"
+                >确认
+            </n-button>
         </div>
     </n-modal>
 </template>
 
 <script lang="ts" setup>
-    import { h, ref } from 'vue';
+    import { h, reactive, ref as vueRef, ref } from 'vue';
     import { tableDriver } from '@/views/_base/tableDriver';
     import { TableDataColumn, TableDataRow } from '@/views/_base/tableDriver/tableTypes';
     import { BasicTable } from '@/components/Table';
     import TableSearch from '@/views/_base/tableDriver/components/TableSearch.vue';
     import { getDeliverRecord, getDeliverRecordExport, resendEmail } from '@/api/record';
-    import { NTag, useDialog, NDialog, NForm, NFormItem, NInput, NButton, FormInst, FormItemRule } from 'naive-ui';
-    import { ref as vueRef, reactive, toRefs } from 'vue';
+    import { FormInst, FormItemRule, NButton, NForm, NFormItem, NInput, NTag } from 'naive-ui';
 
     interface RowData extends TableDataRow {
         code: string;

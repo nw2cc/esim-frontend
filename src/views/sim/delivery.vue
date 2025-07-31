@@ -54,6 +54,7 @@
         { title: '平台商品名称', render: (n: any) => n.detail.platform_item_name },
         { title: '平台规格名称', render: (n: any) => n.detail.platform_sku_name },
 
+        { title: '同步时间', render: (n: any) => n.detail.delivery.sync_time },
         { title: '创建时间', render: (n: any) => n.detail.delivery.create_date },
         { title: '修改时间', render: (n: any) => n.detail.delivery.modify_date },
         { title: '物流单打印时间', render: (n: any) => n.detail.delivery.express_print_date },
@@ -144,7 +145,13 @@
 
             return actions;
         },
-        detailPage: 'esim_deliveryDetail',
+        detailPage: 'sim_deliveryDetail',
+        detailParams: (record: RowData) => {
+            return {
+                iccid: record.iccid,
+                tab: '1',
+            };
+        },
     });
 </script>
 
