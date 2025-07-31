@@ -17,3 +17,13 @@ export function getDeliveryDetail(id: string) {
         },
     });
 }
+
+export function createRechargeOrder(iccid: string) {
+    return http.request({
+        url: '/delivery/createRechargeOrder',
+        method: 'post',
+        data: {
+            iccid,
+        },
+    });
+}

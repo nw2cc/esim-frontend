@@ -18,9 +18,9 @@
     import { ActionItem, TableDataRow } from '@/views/_base/tableDriver/tableTypes';
     import { BasicTable } from '@/components/Table';
     import TableSearch from '@/views/_base/tableDriver/components/TableSearch.vue';
-    import { getDeliveryItems } from '@/api/delivery';
+    import { createRechargeOrder, getDeliveryItems } from '@/api/delivery';
     import { Wallet } from '@icon-park/vue-next';
-    import { NTag, useDialog } from 'naive-ui';
+    import { NSpace, NTag, useDialog } from 'naive-ui';
 
     const statusMap = { '0': '未充值', '1': '已充值' };
     const statusType = { '0': 'warning', '1': 'success' };
@@ -32,7 +32,27 @@
     const table = ref();
     const columns = [
         { title: '金蝶订单号', render: (n: any) => n.detail.delivery.code, fixed: 'left' },
-        { title: '平台订单号', render: (n: any) => n.detail.platform_code, fixed: 'left' },
+        {
+            title: '平台订单号',
+            key: 'platform_code',
+            render: (n: any) => n.detail.platform_code,
+            fixed: 'left',
+            search: { type: 'input' },
+        },
+        { title: 'ICCID', key: 'iccid', fixed: 'left', search: { type: 'input' } },
+
+        { title: '商品数量', render: (n: any) => n.detail.qty },
+        { title: '实际单价', render: (n: any) => n.detail.price },
+        { title: '商品总价', render: (n: any) => n.detail.amount },
+        { title: '让利金额', render: (n: any) => n.detail.discount_fee },
+        { title: '让利后金额', render: (n: any) => n.detail.amount_after },
+        { title: '物流成本', render: (n: any) => n.detail.post_cost },
+        { title: '商品代码', render: (n: any) => n.detail.item_code },
+        { title: '商品名称', render: (n: any) => n.detail.item_name },
+        { title: '组合商品代码', render: (n: any) => n.detail.combine_item_code_split },
+        { title: '组合商品名称', render: (n: any) => n.detail.combine_item_name_split },
+        { title: '平台商品名称', render: (n: any) => n.detail.platform_item_name },
+        { title: '平台规格名称', render: (n: any) => n.detail.platform_sku_name },
 
         { title: '创建时间', render: (n: any) => n.detail.delivery.create_date },
         { title: '修改时间', render: (n: any) => n.detail.delivery.modify_date },
@@ -51,18 +71,6 @@
         { title: '收货地址', render: (n: any) => n.detail.delivery.receiver_address },
         { title: '快递单号', render: (n: any) => n.detail.delivery.express_no },
 
-        { title: '商品数量', render: (n: any) => n.detail.qty },
-        { title: '实际单价', render: (n: any) => n.detail.price },
-        { title: '商品总价', render: (n: any) => n.detail.amount },
-        { title: '让利金额', render: (n: any) => n.detail.discount_fee },
-        { title: '让利后金额', render: (n: any) => n.detail.amount_after },
-        { title: '物流成本', render: (n: any) => n.detail.post_cost },
-        { title: '商品代码', render: (n: any) => n.detail.item_code },
-        { title: '商品名称', render: (n: any) => n.detail.item_name },
-        { title: '平台商品名称', render: (n: any) => n.detail.platform_item_name },
-        { title: '平台规格名称', render: (n: any) => n.detail.platform_sku_name },
-
-        { title: 'ICCID', key: 'iccid', search: { type: 'input' } },
         { title: 'PIN', key: 'pin' },
         { title: 'PUK', key: 'puk' },
         { title: '手机号码', key: 'tel' },
@@ -95,22 +103,23 @@
     }
 
     async function recharge(record: RowData) {
-        dialog.warning({
+        dialog.info({
             title: `创建充值订单`,
             content: () => {
                 return h('div', {}, [
-                    h('div', {}, [
+                    h(NSpace, { align: 'center' }, [
                         h('span', {}, `是否为ICCID`),
-                        h(NTag, {}, record.iccid),
+                        h(NTag, { type: 'primary' }, record.iccid),
                         h('span', {}, `创建充值订单？`),
                     ]),
-                    h('div', {}, `充值商品为：`),
-                    h('div', {}, record.detail.platform_sku_name),
+                    h('div', {}, `组合商品名称：`),
+                    h('div', {}, record.detail.combine_item_name_split),
                 ]);
             },
             positiveText: '确定',
             negativeText: '再想一想',
             onPositiveClick: async () => {
+                await createRechargeOrder(record.iccid);
                 table.value.reload();
             },
         });
