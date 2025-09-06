@@ -33,6 +33,7 @@ export const buildRoutes = (
             path: item.path,
             name: `${moduleName}_${item.path.split('/')[0]}`,
             meta: {
+                keepAlive: true,
                 title: item.title,
                 icon: item.icon,
                 permissions: [`${moduleName}_${item.path}`],

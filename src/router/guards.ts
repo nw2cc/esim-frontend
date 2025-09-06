@@ -88,9 +88,12 @@ export function createRouterGuards(router: Router) {
         // 在这里设置需要缓存的组件名称
         const keepAliveComponents = asyncRouteStore.keepAliveComponents;
         const currentComName: any = to.matched.find((item) => item.name == to.name)?.name;
-        if (currentComName && !keepAliveComponents.includes(currentComName) && to.meta?.keepAlive) {
+        if (currentComName && to.meta?.keepAlive) {
             // 需要缓存的组件
-            keepAliveComponents.push(currentComName);
+            const compName = currentComName.split('_').pop();
+            if (!keepAliveComponents.includes(compName)) {
+                keepAliveComponents.push(compName);
+            }
         } else if (!to.meta?.keepAlive || to.name == 'Redirect') {
             // 不需要缓存的组件
             const index = asyncRouteStore.keepAliveComponents.findIndex((name) => name == currentComName);
