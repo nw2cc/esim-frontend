@@ -26,15 +26,19 @@
         </template>
         <n-form-item>
             <n-button type="info" @click="doSearch">
-                <n-icon>
-                    <search theme="outline" size="20" :strokeWidth="3" />
-                </n-icon>
+                <template #icon>
+                    <n-icon>
+                        <search theme="outline" size="20" :strokeWidth="3" />
+                    </n-icon>
+                </template>
                 搜索
             </n-button>
             <n-button style="margin-left: 10px" @click="init">
-                <n-icon>
-                    <refresh theme="outline" size="20" :strokeWidth="3" />
-                </n-icon>
+                <template #icon>
+                    <n-icon>
+                        <refresh theme="outline" size="20" :strokeWidth="3" />
+                    </n-icon>
+                </template>
                 重置
             </n-button>
         </n-form-item>

@@ -21,6 +21,14 @@ export function getDeliverRecordDetail(id: string) {
     });
 }
 
+export function fetchEid(id: string) {
+    return http.request({
+        url: '/record/fetchEid',
+        method: 'get',
+        params: { record_id: id },
+    });
+}
+
 export function resendEmail(data: any) {
     return http.request({
         url: '/trade/resendEmail',

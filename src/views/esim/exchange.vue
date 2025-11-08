@@ -3,12 +3,12 @@
         <table-search :columns="columns" :driver="driver" />
         <basic-table
             ref="table"
-            :columns="columns"
+            :columns="buildCols()"
             :request="driver.loadDataTable"
             :export="driver.exportDataTable"
             :row-key="(row: RowData) => row.id"
+            :scroll-x="columns.length * columnsWidth + driver.actionWidth"
             :actionColumn="driver.actionColumn"
-            :scroll-x="1090"
             :exportable="true"
         />
     </n-card>
@@ -56,6 +56,10 @@
         email: string;
         language: string;
         status: string;
+        eid: string;
+        iccid: string;
+        shop_name: string;
+        warehouse_name: string;
         batch_id: string;
         create_time: string;
     }
@@ -67,17 +71,24 @@
 
     const table = ref();
     const columns: TableDataColumn<RowData>[] = [
+        { title: '店铺', key: 'shop_name', fixed: 'left', search: { type: 'input' } },
+        { title: '平台商品码', key: 'platform_code', fixed: 'left', search: { type: 'input' } },
+        { title: 'ICCID', key: 'iccid', fixed: 'left', search: { type: 'input' } },
         { title: '金蝶订单号', key: 'code', search: { type: 'input' } },
-        { title: '渠道订单号', key: 'sub_code', search: { type: 'input' } },
-        { title: '渠道商品码', key: 'platform_code', search: { type: 'input' } },
+        { title: '平台订单号', key: 'sub_code', search: { type: 'input' } },
+        { title: '平台名称', key: 'platform_name', search: { type: 'input' } },
         { title: 'SKU ID', key: 'sku_id', search: { type: 'input' } },
         { title: 'SKU 名称', key: 'sku_name', search: { type: 'input' } },
         { title: '天数', key: 'days', search: { type: 'input' } },
         { title: '数量', key: 'qty', search: { type: 'input' } },
         { title: '邮箱', key: 'email', search: { type: 'input' } },
+        { title: 'EID', key: 'eid', search: { type: 'input' } },
+        { title: '创建时间', key: 'create_time', search: { type: 'datetime' } },
         {
             title: '状态',
             key: 'status',
+            width: '100px',
+            fixed: 'right',
             search: { type: 'select', selectData: statusMap },
             render(row: RowData) {
                 return h(
@@ -89,8 +100,14 @@
                 );
             },
         },
-        { title: '创建时间', key: 'create_time', search: { type: 'datetime' } },
     ];
+    const columnsWidth = 180;
+
+    function buildCols() {
+        return columns.map((item) => {
+            return { width: columnsWidth, ...item };
+        });
+    }
 
     const showResendDialog = vueRef(false);
     const resendFormRef = vueRef<FormInst | null>(null);
@@ -149,7 +166,7 @@
             };
         },
         resend: handleResend,
-        actionWidth: '238px',
+        actionWidth: 240,
     });
 </script>
 
