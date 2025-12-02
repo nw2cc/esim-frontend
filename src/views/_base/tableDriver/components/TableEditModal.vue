@@ -4,7 +4,7 @@
         v-model:show="show"
         :show-icon="false"
         :mask-closable="false"
-        :title="`${driver.actionStatus.value === 0 ? '创建' : '编辑'}${pageTitle}`"
+        :title="`${driver.actionStatus.value === 0 ? '创建' : '编辑'}${pageTitle.replace('管理', '')}`"
     >
         <n-card class="table-edit-modal">
             <n-form label-placement="left" label-width="auto" size="medium">
