@@ -9,3 +9,7 @@ declare module 'virtual:*' {
     const result: any;
     export default result;
 }
+
+declare module 'dayjs' {
+    export default dayjs;
+}

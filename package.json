@@ -29,6 +29,7 @@
         "axios": "^1.6.8",
         "blueimp-md5": "^2.19.0",
         "date-fns": "^3.6.0",
+        "dayjs": "^1.11.19",
         "echarts": "^5.5.0",
         "element-resize-detector": "^1.2.4",
         "file-saver": "^2.0.5",
