@@ -1,9 +1,4 @@
 import { http } from '@/core/utils/http/axios';
-import axios from 'axios';
-import { useUser } from '@/store/modules/user';
-
-const userStore = useUser();
-const token = userStore.getToken;
 
 export function getProductPage(data: any) {
     return http.request({
@@ -63,13 +58,16 @@ export function importProduct(file: File) {
 
 // 导出功能
 export function getProductExport(data: any): Promise<Blob> {
-    return axios
-        .post('/api/product/getProductPage', data, {
+    return http.request<Blob>(
+        {
+            url: '/product/getProductPage',
+            method: 'post',
+            data,
             responseType: 'blob',
-            withCredentials: true,
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-        .then((response) => response.data);
+            timeout: 600 * 1000, // 300秒超时，可根据需要调整
+        },
+        {
+            isTransformResponse: false, // 不转换响应，直接返回 res.data (Blob)
+        }
+    );
 }
