@@ -67,7 +67,6 @@ export function getProductExport(data: any): Promise<Blob> {
         .post('/api/product/getProductPage', data, {
             responseType: 'blob',
             withCredentials: true,
-            timeout: 600 * 1000, // 导出功能设置60秒超时
             headers: {
                 Authorization: `Bearer ${token}`,
             },
