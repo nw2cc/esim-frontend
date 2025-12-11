@@ -46,8 +46,8 @@
     import { fetchEid, getDeliverRecordDetail } from '@/api/record';
     import { Search } from '@icon-park/vue-next';
 
-    const statusMap = { '0': '未开卡', '1': '已开卡', '2': '已发货' };
-    const statusType = { '0': 'warning', '1': 'info', '2': 'success' };
+    const statusMap = { '0': '未开卡', '1': '已开卡', '2': '已发货', '3': '取消中', '4': '已取消', '99': 'MB99异常' };
+    const statusType = { '0': 'warning', '1': 'info', '2': 'success', '3': 'error', '4': 'error', '99': 'error' };
 
     const route = useRoute();
     const id = ref(route.params.id);
