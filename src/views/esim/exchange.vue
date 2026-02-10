@@ -70,6 +70,27 @@
     const statusType = { '0': 'warning', '1': 'info', '2': 'success', '99': 'error' };
 
     const table = ref();
+
+    // 防抖控制 - 共享同一个请求 Promise
+    let pendingRequest: Promise<any> | null = null;
+    const loadDataWithDebounce = async (params: any) => {
+        // 如果已经有请求在进行中，返回同一个 Promise
+        if (pendingRequest) {
+            return pendingRequest;
+        }
+
+        // 创建新的请求
+        pendingRequest = getDeliverRecord(params)
+            .finally(() => {
+                // 请求完成后延迟清除，避免极短时间内的重复请求
+                setTimeout(() => {
+                    pendingRequest = null;
+                }, 50);
+            });
+
+        return pendingRequest;
+    };
+
     const columns: TableDataColumn<RowData>[] = [
         { title: '店铺', key: 'shop_name', fixed: 'left', search: { type: 'input' } },
         { title: '平台商品码', key: 'platform_code', fixed: 'left', search: { type: 'input' } },
@@ -157,7 +178,7 @@
 
     const driver = tableDriver<RowData>({
         table,
-        loadApi: getDeliverRecord,
+        loadApi: loadDataWithDebounce,
         exportApi: getDeliverRecordExport,
         detailPage: 'esim_exchangeDetail',
         detailParams: (record: RowData) => {
