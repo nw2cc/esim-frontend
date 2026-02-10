@@ -189,6 +189,11 @@
             width: 120,
         },
         {
+            title: '总量',
+            key: 'totalVolume',
+            width: 120,
+        },
+        {
             title: '操作',
             key: 'actions',
             fixed: 'right' as const,
