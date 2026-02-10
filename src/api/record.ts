@@ -29,6 +29,38 @@ export function fetchEid(id: string) {
     });
 }
 
+export function updateOrderDetail(data: any) {
+    return http.request({
+        url: '/rt/updateOrderDetail',
+        method: 'post',
+        data,
+    });
+}
+
+export function suspendEsim(data: any) {
+    return http.request({
+        url: '/rt/suspend',
+        method: 'post',
+        data,
+    });
+}
+
+export function unsuspendEsim(data: any) {
+    return http.request({
+        url: '/rt/unsuspend',
+        method: 'post',
+        data,
+    });
+}
+
+export function cancelEsim(data: any) {
+    return http.request({
+        url: '/rt/cancel',
+        method: 'post',
+        data,
+    });
+}
+
 export function resendEmail(data: any) {
     return http.request({
         url: '/trade/resendEmail',

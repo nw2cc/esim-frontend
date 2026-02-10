@@ -1,15 +1,26 @@
 <template>
     <n-card :bordered="false" class="proCard" title="兑换记录详情">
         <template #header-extra>
-            <n-button type="success" @click="getEid">
-                <template #icon>
-                    <n-icon>
-                        <search theme="outline" size="20" :strokeWidth="3" />
-                    </n-icon>
-                </template>
-                查询 EID
-            </n-button>
+            <n-space>
+                <n-button v-if="detail.platform_name === 'RT'" type="primary" @click="updateOrder">
+                    <template #icon>
+                        <n-icon>
+                            <search theme="outline" size="20" :strokeWidth="3" />
+                        </n-icon>
+                    </template>
+                    更新订单详情
+                </n-button>
+                <n-button type="success" @click="getEid">
+                    <template #icon>
+                        <n-icon>
+                            <search theme="outline" size="20" :strokeWidth="3" />
+                        </n-icon>
+                    </template>
+                    查询 EID
+                </n-button>
+            </n-space>
         </template>
+
         <n-descriptions label-placement="left" bordered :column="3" size="small">
             <n-descriptions-item label="金蝶订单号">{{ detail.code }}</n-descriptions-item>
             <n-descriptions-item label="平台订单号">{{ detail.sub_code }}</n-descriptions-item>
@@ -30,6 +41,11 @@
             <n-descriptions-item label="EID">{{ detail.eid }}</n-descriptions-item>
         </n-descriptions>
 
+        <!-- RT 平台的 eSIM 列表 -->
+        <n-card v-if="detail.platform_name === 'RT' && esimList.length > 0" title="eSIM 列表" style="margin-top: 20px">
+            <n-data-table :columns="esimColumns" :data="esimList" :pagination="false" :bordered="true" size="small" />
+        </n-card>
+
         <n-card title="API返回" style="margin-top: 20px">
             <pre>{{ res_json || '无' }}</pre>
         </n-card>
@@ -41,11 +57,20 @@
 </template>
 
 <script lang="ts" setup>
-    import { computed, onMounted, ref } from 'vue';
+    import { computed, onMounted, ref, h } from 'vue';
     import { useRoute } from 'vue-router';
-    import { fetchEid, getDeliverRecordDetail } from '@/api/record';
+    import {
+        fetchEid,
+        getDeliverRecordDetail,
+        updateOrderDetail,
+        suspendEsim,
+        unsuspendEsim,
+        cancelEsim,
+    } from '@/api/record';
     import { Search } from '@icon-park/vue-next';
+    import { useMessage, NButton, NSpace } from 'naive-ui';
 
+    const message = useMessage();
     const statusMap = { '0': '未开卡', '1': '已开卡', '2': '已发货', '3': '取消中', '4': '已取消', '99': 'MB99异常' };
     const statusType = { '0': 'warning', '1': 'info', '2': 'success', '3': 'error', '4': 'error', '99': 'error' };
 
@@ -67,8 +92,183 @@
         return '';
     });
 
+    // eSIM 列表数据
+    const esimList = computed(() => {
+        if ('api_response' in detail.value) {
+            try {
+                const apiResponse = JSON.parse(detail.value.api_response as string);
+                return apiResponse?.all_esim_list || [];
+            } catch {
+                return [];
+            }
+        }
+        return [];
+    });
+
+    // 处理暂停套餐
+    async function handleSuspend(row: any) {
+        try {
+            const res = await suspendEsim({ esim_tran_no: row.esimTranNo });
+            if (res.success === false) {
+                message.error(res.errorMsg);
+            } else {
+                message.success('操作成功');
+                // 成功后更新订单详情
+                await updateOrder();
+            }
+        } catch (error) {
+            message.error('操作失败');
+            console.error(error);
+        }
+    }
+
+    // 处理重启套餐
+    async function handleUnsuspend(row: any) {
+        try {
+            const res = await unsuspendEsim({ esim_tran_no: row.esimTranNo });
+            if (res.success === false) {
+                message.error(res.errorMsg);
+            } else {
+                message.success('操作成功');
+                // 成功后更新订单详情
+                await updateOrder();
+            }
+        } catch (error) {
+            message.error('操作失败');
+            console.error(error);
+        }
+    }
+
+    // 处理取消套餐
+    async function handleCancel(row: any) {
+        try {
+            const res = await cancelEsim({ esim_tran_no: row.esimTranNo });
+            if (res.success === false) {
+                message.error(res.errorMsg);
+            } else {
+                message.success('操作成功');
+                // 成功后更新订单详情
+                await updateOrder();
+            }
+        } catch (error) {
+            message.error('操作失败');
+            console.error(error);
+        }
+    }
+
+    // 表格列定义
+    const esimColumns = [
+        {
+            title: 'eSIM 交易号',
+            key: 'esimTranNo',
+            width: 150,
+        },
+        {
+            title: 'ICCID',
+            key: 'iccid',
+            width: 200,
+        },
+        {
+            title: 'EID',
+            key: 'eid',
+            width: 200,
+        },
+        {
+            title: 'SMDP 状态',
+            key: 'smdpStatus',
+            width: 150,
+        },
+        {
+            title: 'eSIM 状态',
+            key: 'esimStatus',
+            width: 150,
+        },
+        {
+            title: '用量',
+            key: 'orderUsage',
+            width: 120,
+        },
+        {
+            title: '操作',
+            key: 'actions',
+            fixed: 'right' as const,
+            width: 250,
+            render(row: any) {
+                return h(
+                    NSpace,
+                    {},
+                    {
+                        default: () => [
+                            h(
+                                NButton,
+                                {
+                                    size: 'small',
+                                    type: 'warning',
+                                    onClick: () => handleSuspend(row),
+                                },
+                                { default: () => '暂停套餐' }
+                            ),
+                            h(
+                                NButton,
+                                {
+                                    size: 'small',
+                                    type: 'success',
+                                    onClick: () => handleUnsuspend(row),
+                                },
+                                { default: () => '重启套餐' }
+                            ),
+                            h(
+                                NButton,
+                                {
+                                    size: 'small',
+                                    type: 'error',
+                                    onClick: () => handleCancel(row),
+                                },
+                                { default: () => '取消套餐' }
+                            ),
+                        ],
+                    }
+                );
+            },
+        },
+    ];
+
     async function getEid() {
         detail.value = await fetchEid(id.value as string);
+    }
+
+    async function updateOrder() {
+        try {
+            // 从 api_response 中获取 order_no
+            if (!detail.value.api_response) {
+                message.error('无法获取订单信息');
+                return;
+            }
+
+            const apiResponse = JSON.parse(detail.value.api_response as string);
+            const orderNo = apiResponse?.order?.obj?.orderNo;
+
+            if (!orderNo) {
+                message.error('无法获取订单号');
+                return;
+            }
+
+            const res = await updateOrderDetail({
+                id: id.value,
+                order_no: orderNo,
+            });
+
+            if (res.code === 200) {
+                message.success(res.message || '更新成功');
+                // 重新获取详情
+                detail.value = await getDeliverRecordDetail(id.value as string);
+            } else {
+                message.error(res.message || '更新失败');
+            }
+        } catch (error) {
+            message.error('更新失败');
+            console.error(error);
+        }
     }
 
     onMounted(async () => {
