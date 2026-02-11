@@ -66,6 +66,7 @@
         suspendEsim,
         unsuspendEsim,
         cancelEsim,
+        revokeEsim,
     } from '@/api/record';
     import { Search } from '@icon-park/vue-next';
     import { useMessage, NButton, NSpace } from 'naive-ui';
@@ -156,6 +157,23 @@
         }
     }
 
+    // 处理强制停卡
+    async function handleRevoke(row: any) {
+        try {
+            const res = await revokeEsim({ esim_tran_no: row.esimTranNo });
+            if (res.success === false) {
+                message.error(res.errorMsg);
+            } else {
+                message.success('操作成功');
+                // 成功后更新订单详情
+                await updateOrder();
+            }
+        } catch (error) {
+            message.error('操作失败');
+            console.error(error);
+        }
+    }
+
     // 表格列定义
     const esimColumns = [
         {
@@ -197,7 +215,7 @@
             title: '操作',
             key: 'actions',
             fixed: 'right' as const,
-            width: 250,
+            width: 330,
             render(row: any) {
                 return h(
                     NSpace,
@@ -230,6 +248,15 @@
                                     onClick: () => handleCancel(row),
                                 },
                                 { default: () => '取消套餐' }
+                            ),
+                            h(
+                                NButton,
+                                {
+                                    size: 'small',
+                                    type: 'error',
+                                    onClick: () => handleRevoke(row),
+                                },
+                                { default: () => '强制停卡' }
                             ),
                         ],
                     }
