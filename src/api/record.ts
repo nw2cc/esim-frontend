@@ -61,6 +61,14 @@ export function cancelEsim(data: any) {
     });
 }
 
+export function revokeEsim(data: any) {
+    return http.request({
+        url: '/rt/revoke',
+        method: 'post',
+        data,
+    });
+}
+
 export function resendEmail(data: any) {
     return http.request({
         url: '/trade/resendEmail',
